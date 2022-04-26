@@ -1,4 +1,4 @@
-package com.basicrntstemplate.newarchitecture.components;
+package com.CryptoWallet.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;

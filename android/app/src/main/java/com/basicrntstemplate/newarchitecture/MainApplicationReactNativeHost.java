@@ -1,4 +1,4 @@
-package com.basicrntstemplate.newarchitecture;
+package com.CryptoWallet.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.EmptyReactNativeConfig;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.basicrntstemplate.BuildConfig;
-import com.basicrntstemplate.newarchitecture.components.MainComponentsRegistry;
-import com.basicrntstemplate.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.CryptoWallet.BuildConfig;
+import com.CryptoWallet.newarchitecture.components.MainComponentsRegistry;
+import com.CryptoWallet.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 
