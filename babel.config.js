@@ -8,6 +8,11 @@ module.exports = {
         extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts'],
         alias: {
           '~components': './src/components',
+          '~navigation': './src/navigation',
+          '~screens': './src/screens',
+          '~theme': './src/theme',
+          '~assets': './src/assets',
+          '~core': './src/core',
         },
       },
     ],

@@ -21,11 +21,7 @@ module.exports = {
       rules: {
         'no-undef': 'off',
         'no-shadow': 'off',
-        '@typescript-eslint/no-shadow': [
-          'error',
-          ,
-          { ignoreTypeValueShadow: true },
-        ],
+        '@typescript-eslint/no-shadow': ['error'],
         'simple-import-sort/imports': [
           'error',
           {
