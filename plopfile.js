@@ -14,6 +14,19 @@ module.exports = (plop) => {
         path: 'src/components/{{pascalCase name}}/index.tsx',
         templateFile: 'plop/component.hbs',
       },
+      {
+        type: 'modify',
+        path: 'src/components/index.ts',
+        pattern: /(\/\/ COMPONENT IMPORTS)/g,
+        template:
+          "import {{pascalCase name}} from './{{pascalCase name}}';\n$1",
+      },
+      {
+        path: 'src/components/index.ts',
+        pattern: /(\/\/ COMPONENT EXPORTS)/g,
+        template: '{{pascalCase name}},\n  $1',
+        type: 'modify',
+      },
     ],
   });
   plop.setGenerator('screen', {
@@ -35,6 +48,19 @@ module.exports = (plop) => {
         type: 'add',
         path: 'src/screens/{{pascalCase name}}/{{pascalCase name}}View.tsx',
         templateFile: 'plop/screen/view.hbs',
+      },
+      {
+        type: 'modify',
+        path: 'src/screens/index.ts',
+        pattern: /(\/\/ SCREEN IMPORTS)/g,
+        template:
+          "import {{pascalCase name}} from './{{pascalCase name}}';\n$1",
+      },
+      {
+        path: 'src/screens/index.ts',
+        pattern: /(\/\/ SCREEN EXPORTS)/g,
+        template: '{{pascalCase name}},\n  $1',
+        type: 'modify',
       },
     ],
   });

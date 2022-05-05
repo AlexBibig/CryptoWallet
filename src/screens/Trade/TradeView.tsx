@@ -1,10 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-const {{pascalCase name}}View: React.FC = () => {
+import { Text } from '~components';
+
+const TradeView: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text>{{pascalCase name}} Screen</Text>
+      <Text>Trade Screen</Text>
     </View>
   );
 };
@@ -17,4 +19,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default {{pascalCase name}}View;
+export default TradeView;
