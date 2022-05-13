@@ -3,7 +3,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 
-// import { TabBar } from '~components';
+import { TabBar } from '~components';
 import { Home, Market, Portfolio, Profile, Trade } from '~screens';
 
 const { Navigator, Screen } = createBottomTabNavigator();
@@ -16,7 +16,7 @@ const RootStack: React.FC = () => {
         screenOptions={{
           headerShown: false,
         }}
-        // tabBar={(props) => <TabBar {...props} />}
+        tabBar={(props) => <TabBar {...props} />}
       >
         <Screen name="Home" component={Home} />
         <Screen name="Portfolio" component={Portfolio} />

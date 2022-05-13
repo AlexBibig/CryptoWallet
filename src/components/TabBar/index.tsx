@@ -1,299 +1,139 @@
-import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useRef } from 'react';
+import { Animated, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { EdgeInsets, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import {
   NavigationHelpers,
   ParamListBase,
+  RouteProp,
   TabNavigationState,
 } from '@react-navigation/native';
 
+import { Icon, Text } from '~components';
+import { TAB_CONFIG } from '~core/constants';
 import { colors } from '~theme';
 
-interface TabbarProps {
+interface TabBarProps {
   state: TabNavigationState<ParamListBase>;
+  navigation: NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>;
 }
 
-const MyTabBar: React.FC<TabbarProps> = ({ state }) => {
-  const tabs = [...state.routes];
-
-  console.log('tabs', tabs);
-
+const TabBar: React.FC<TabBarProps> = ({ state, navigation }) => {
   const insets = useSafeAreaInsets();
   const styles = getStyles(insets);
 
+  const onPress = (route: RouteProp<ParamListBase, string>) => {
+    navigation.navigate(route.name);
+  };
+
+  const onLongPress = (route: RouteProp<ParamListBase, string>) => {
+    navigation.emit({
+      type: 'tabLongPress',
+      target: route.key,
+    });
+  };
+
   return (
     <View style={styles.container}>
-      {tabs.map(({ name, key }, index: number) => (
+      {state.routes.map((route, index: number) => (
         <Tab
-          key={key}
-          name={name}
-          inFocus={state.index === index}
-          // iconName={TabConfig[tabName].iconName}
-          // onPress={() => onPressTab(tabName)}
+          key={route.key}
+          name={route.name}
+          iconName={TAB_CONFIG[route.name as keyof typeof TAB_CONFIG].icon}
+          isFocused={state.index === index}
+          onPress={() => onPress(route)}
+          onLongPress={() => onLongPress(route)}
+          highlighted={route.name === TAB_CONFIG.Trade.name}
         />
       ))}
     </View>
   );
 };
 
-export { MyTabBar };
+interface TabProps {
+  name: string;
+  iconName: string;
+  isFocused: boolean;
+  onPress: () => void;
+  onLongPress: () => void;
+  highlighted: boolean;
+}
 
-// export default TabBar;
-
-// // interface TabProps {
-// //   label: string;
-// //   iconName: string;
-// //   inFocus: boolean;
-// //   onPress: () => void;
-// // }
-
-const Tab: React.FC<any> = ({
+const Tab: React.FC<TabProps> = ({
   name = '',
   iconName = '',
-  inFocus = false,
+  isFocused = false,
   onPress = () => {},
+  onLongPress = () => {},
+  highlighted = false,
 }): JSX.Element => {
-  const styles = getStyles(undefined);
+  const styles = getStyles(null);
+  const color = ((!highlighted &&
+    (isFocused ? colors.white : colors.lightGray)) ||
+    colors.lightGreen) as keyof typeof colors;
+
+  const AnimatedTouhable = Animated.createAnimatedComponent(TouchableOpacity);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  const fadeIn = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 100,
+      duration: 1000,
+      useNativeDriver: false,
+    }).start();
+  };
+
+  // const fadeOut = () => {
+  //   // Will change fadeAnim value to 0 in 3 seconds
+  //   Animated.timing(fadeAnim, {
+  //     toValue: 0,
+  //     duration: 3000,
+  //   }).start();
+  // };
 
   return (
-    <TouchableOpacity onPress={onPress} style={styles.tabWrapper}>
-      <Text
-        style={{
-          color: inFocus ? '#81C17D' : '#555555',
-          marginTop: 2,
-        }}
-      >
+    <AnimatedTouhable
+      onPress={() => {
+        onPress();
+        fadeIn();
+      }}
+      onLongPress={onLongPress}
+      style={[
+        styles.tab,
+        {
+          // Bind opacity to animated value
+          marginBottom: fadeAnim,
+        },
+      ]}
+    >
+      <Icon name={iconName} width={20} height={20} color={color} />
+
+      <Text style={styles.text} size={14} color={color}>
         {name}
       </Text>
-    </TouchableOpacity>
+    </AnimatedTouhable>
   );
 };
 
-const getStyles = (insets: EdgeInsets | undefined) =>
+const getStyles = (insets: EdgeInsets | null) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-evenly',
-      paddingBottom: Number(insets?.bottom) > 0 ? 12 : 0,
+      paddingVertical: Number(insets?.bottom) > 0 ? 24 : 12,
       backgroundColor: colors.primary,
+      borderColor: 'transparent',
     },
-    tabWrapper: {
+    tab: {
       flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
-      paddingVertical: 12,
+    },
+    text: {
+      marginTop: 4,
     },
   });
 
-// // const TabConfig: any = {
-// //   //redo
-// //   Home: {
-// //     label: 'Home',
-// //     iconName: 'house',
-// //   },
-// //   Profile: {
-// //     label: 'Profile',
-// //     iconName: 'user',
-// //   },
-// //   SignOut: {
-// //     label: 'Sign Out',
-// //     iconName: 'sign-out',
-// //   },
-// // };
-
-// import React from 'react';
-// import { StyleSheet, Text, View } from 'react-native';
-
-// const index = (props: any) => {
-//   return (
-//     <View>
-//       <Text>index</Text>
-//     </View>
-//   );
-// };
-
-// export default index;
-
-// const styles = StyleSheet.create({});
-
-// ================================================================================================= //
-
-// import React from 'react';
-// import { TouchableOpacity, View, Text } from 'react-native';
-// import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
-
-// /**
-//  * BottomBar component
-//  * @prop {type} example - example description
-//  */
-// const BottomBar = ({ state, descriptors, navigation }) => {
-//   const home = state.routes[0];
-//   const calendar = state.routes[1];
-//   const interesting = state.routes[2];
-//   const profile = state.routes[3];
-
-//   const onPressTab = (tabName) => {
-//     navigation.navigate(tabName, { screen: tabName });
-//   };
-
-//   const renderTab = (tabName, index) => {
-//     switch (tabName) {
-//       case 'Home':
-//         return (
-//           <BottomTab
-//             key={index}
-//             label="Главная"
-//             iconName="home"
-//             inFocus={state.index === 0}
-//             onPress={() => onPressTab(tabName)}
-//           />
-//         );
-//       case 'Calendar':
-//         return (
-//           <BottomTab
-//             key={index}
-//             label="Занятия"
-//             iconName="calendar"
-//             inFocus={state.index === 1}
-//             onPress={() => onPressTab(tabName)}
-//           />
-//         );
-//       case 'Interesting':
-//         return (
-//           <BottomTab
-//             key={index}
-//             label="Интересное"
-//             iconName="interesting"
-//             inFocus={state.index === 2}
-//             onPress={() => onPressTab(tabName)}
-//           />
-//         );
-//       case 'Profile':
-//         return (
-//           <BottomTab
-//             key={index}
-//             label="Профиль"
-//             iconName="profile"
-//             inFocus={state.index === 3}
-//             onPress={() => onPressTab(tabName)}
-//           />
-//         );
-//     }
-//   };
-//   const BottomTab = ({
-//     label = '',
-//     iconName = '',
-//     inFocus = false,
-//     onPress = () => {},
-//   }) => {
-//     return (
-//       <TouchableOpacity onPress={onPress} style={[styles.tabWrapper]}>
-//         <Icon
-//           width={24}
-//           height={24}
-//           color={inFocus ? colors.primary.default : colors.grayscale[40]}
-//           name={iconName}
-//         />
-//         <Text
-//           size="11"
-//           style={styles.label}
-//           color={inFocus ? colors.primary.default : colors.grayscale[40]}
-//           weight="500"
-//         >
-//           {label}
-//         </Text>
-//       </TouchableOpacity>
-//     );
-//   };
-//   return (
-//     <SafeAreaInsetsContext.Consumer>
-//       {(insets) => (
-//         <View
-//           style={[
-//             styles.container,
-//             { paddingBottom: insets.bottom > 0 ? 18 : 0 },
-//           ]}
-//         >
-//           {state.routes.map((el, index) => renderTab(el.name, index))}
-//         </View>
-//       )}
-//     </SafeAreaInsetsContext.Consumer>
-//   );
-// };
-
-// const styles = RNStyles.create({
-//   container: {
-//     backgroundColor: colors.grayscale[0],
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     justifyContent: 'space-between',
-//   },
-//   tabWrapper: {
-//     flex: 1,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     paddingVertical: 4,
-//   },
-//   label: {},
-// });
-
-// export default BottomBar;
-
-function TabBar({ state, descriptors, navigation }) {
-  return (
-    <View style={{ flexDirection: 'row' }}>
-      {state.routes.map((route, index) => {
-        const { options } = descriptors[route.key];
-        const label =
-          options.tabBarLabel !== undefined
-            ? options.tabBarLabel
-            : options.title !== undefined
-            ? options.title
-            : route.name;
-
-        const isFocused = state.index === index;
-
-        const onPress = () => {
-          const event = navigation.emit({
-            type: 'tabPress',
-            target: route.key,
-            canPreventDefault: true,
-          });
-
-          if (!isFocused && !event.defaultPrevented) {
-            // The `merge: true` option makes sure that the params inside the tab screen are preserved
-            navigation.navigate({ name: route.name, merge: true });
-          }
-        };
-
-        const onLongPress = () => {
-          navigation.emit({
-            type: 'tabLongPress',
-            target: route.key,
-          });
-        };
-
-        return (
-          <TouchableOpacity
-            accessibilityRole="button"
-            accessibilityState={isFocused ? { selected: true } : {}}
-            accessibilityLabel={options.tabBarAccessibilityLabel}
-            testID={options.tabBarTestID}
-            onPress={onPress}
-            onLongPress={onLongPress}
-            style={{ flex: 1 }}
-          >
-            <Text style={{ color: isFocused ? '#673ab7' : '#222' }}>
-              {label}
-            </Text>
-          </TouchableOpacity>
-        );
-      })}
-    </View>
-  );
-}
-
-export default MyTabBar;
+export default TabBar;
