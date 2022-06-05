@@ -13,6 +13,7 @@ module.exports = {
           '~theme': './src/theme',
           '~assets': './src/assets',
           '~core': './src/core',
+          '~types': './src/types',
         },
       },
     ],

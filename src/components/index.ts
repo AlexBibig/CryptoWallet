@@ -4,8 +4,8 @@ import Text from './Text';
 // COMPONENT IMPORTS
 
 export {
-  TabBar,
   Text,
   Icon,
+  TabBar,
   // COMPONENT EXPORTS
 };
