@@ -1,7 +1,7 @@
 import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
-export const colors = {
+export const COLORS = {
   primary: '#1E1E1E',
   secondary: '#3B3B3B',
   white: '#fff',
@@ -15,7 +15,7 @@ export const colors = {
   transparentBlack: 'rgba(0, 0, 0, 0.8)',
   transparentLightBlack: 'rgba(0, 0, 0, 0.4)',
 };
-export const sizes = {
+export const SIZES = {
   // global sizes
   base: 8,
   font: 14,
@@ -40,45 +40,40 @@ export const sizes = {
   height,
 };
 
-export const fonts = {
-  largeTitle: { fontFamily: 'Roboto-Black', fontSize: sizes.largeTitle },
-  h1: { fontFamily: 'Roboto-Black', fontSize: sizes.h1, lineHeight: 36 },
-  h2: { fontFamily: 'Roboto-Bold', fontSize: sizes.h2, lineHeight: 30 },
-  h3: { fontFamily: 'Roboto-Bold', fontSize: sizes.h3, lineHeight: 22 },
-  h4: { fontFamily: 'Roboto-Bold', fontSize: sizes.h4, lineHeight: 22 },
-  h5: { fontFamily: 'Roboto-Bold', fontSize: sizes.h5, lineHeight: 22 },
+export const FONTS = {
+  largeTitle: { fontSize: SIZES.largeTitle },
+  h1: { fontSize: SIZES.h1, lineHeight: 36 },
+  h2: { fontSize: SIZES.h2, lineHeight: 30 },
+  h3: { fontSize: SIZES.h3, lineHeight: 22 },
+  h4: { fontSize: SIZES.h4, lineHeight: 22 },
+  h5: { fontSize: SIZES.h5, lineHeight: 22 },
   body1: {
-    fontFamily: 'Roboto-Regular',
-    fontSize: sizes.body1,
+    fontSize: SIZES.body1,
     lineHeight: 36,
   },
   body2: {
-    fontFamily: 'Roboto-Regular',
-    fontSize: sizes.body2,
+    fontSize: SIZES.body2,
     lineHeight: 30,
   },
   body3: {
-    fontFamily: 'Roboto-Regular',
-    fontSize: sizes.body3,
+    fontSize: SIZES.body3,
     lineHeight: 22,
   },
   body4: {
-    fontFamily: 'Roboto-Regular',
-    fontSize: sizes.body4,
+    fontSize: SIZES.body4,
     lineHeight: 22,
   },
   body5: {
-    fontFamily: 'Roboto-Regular',
-    fontSize: sizes.body5,
+    fontSize: SIZES.body5,
     lineHeight: 22,
   },
 };
 
-export const hitSlop = {
+export const HIT_SLOP = {
   top: 12,
   right: 12,
   bottom: 12,
   left: 12,
 };
 
-export default { colors, sizes, fonts, hitSlop };
+export default { COLORS, SIZES, FONTS, HIT_SLOP };

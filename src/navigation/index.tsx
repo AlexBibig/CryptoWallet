@@ -4,7 +4,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 
 import { TabBar } from '~components';
-import { Home, Market, Portfolio, Profile, Trade } from '~screens';
+import { Home, Market, Portfolio, Trade } from '~screens';
+
+import { ProfileStack } from './stacks';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -22,7 +24,7 @@ const RootStack: React.FC = () => {
         <Screen name="Portfolio" component={Portfolio} />
         <Screen name="Trade" component={Trade} />
         <Screen name="Market" component={Market} />
-        <Screen name="Profile" component={Profile} />
+        <Screen name="ProfileStack" component={ProfileStack} />
       </Navigator>
     </NavigationContainer>
   );

@@ -52,20 +52,20 @@ import Trash from '~assets/icons/trash.svg';
 import User from '~assets/icons/user.svg';
 import Video from '~assets/icons/video.svg';
 import Zap from '~assets/icons/zap.svg';
-import { colors } from '~theme';
+import { COLORS } from '~theme';
 
 interface IconProps {
   name: string;
   width?: number;
   height?: number;
-  color?: keyof typeof colors;
+  color?: keyof typeof COLORS;
 }
 
 const Icon: React.FC<IconProps> = ({
   name = '',
   width = 24,
   height = 24,
-  color = colors.black,
+  color = COLORS.black,
 }) => {
   switch (name) {
     case 'bar':

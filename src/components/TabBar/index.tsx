@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { Animated, StyleSheet, TouchableOpacity, View } from 'react-native';
+import React from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { EdgeInsets, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/lib/typescript/src/types';
@@ -12,7 +12,9 @@ import {
 
 import { Icon, Text } from '~components';
 import { TAB_CONFIG } from '~core/constants';
-import { colors } from '~theme';
+import { COLORS, FONTS } from '~theme';
+import useAppContext from '~context';
+import { animateLayout } from '~core/utils';
 
 interface TabBarProps {
   state: TabNavigationState<ParamListBase>;
@@ -20,33 +22,52 @@ interface TabBarProps {
 }
 
 const TabBar: React.FC<TabBarProps> = ({ state, navigation }) => {
-  const insets = useSafeAreaInsets();
-  const styles = getStyles(insets);
+  const {
+    state: {
+      modals: { isTradeModalVisible },
+    },
+    actions: { setTradeModalVisibility },
+  } = useAppContext();
+  const styles = getStyles();
 
   const onPress = (route: RouteProp<ParamListBase, string>) => {
     navigation.navigate(route.name);
+    if (isTradeModalVisible) {
+      setTradeModalVisibility(false);
+    }
   };
 
-  const onLongPress = (route: RouteProp<ParamListBase, string>) => {
-    navigation.emit({
-      type: 'tabLongPress',
-      target: route.key,
-    });
+  const onLongPress = (
+    route: RouteProp<ParamListBase, string>,
+    highlighted: boolean,
+  ) => {
+    if (highlighted) {
+      navigation.navigate(route.name);
+      setTradeModalVisibility(true);
+    }
   };
 
   return (
     <View style={styles.container}>
-      {state.routes.map((route, index: number) => (
-        <Tab
-          key={route.key}
-          name={route.name}
-          iconName={TAB_CONFIG[route.name as keyof typeof TAB_CONFIG].icon}
-          isFocused={state.index === index}
-          onPress={() => onPress(route)}
-          onLongPress={() => onLongPress(route)}
-          highlighted={route.name === TAB_CONFIG.Trade.name}
-        />
-      ))}
+      {state.routes.map((route, index: number) => {
+        const highlighted = route.name === TAB_CONFIG.Trade.name;
+
+        return (
+          <Tab
+            key={route.key}
+            name={TAB_CONFIG[route.name as keyof typeof TAB_CONFIG].name}
+            iconName={
+              !highlighted || !isTradeModalVisible
+                ? TAB_CONFIG[route.name as keyof typeof TAB_CONFIG].icon
+                : 'close'
+            }
+            isFocused={state.index === index}
+            onPress={() => onPress(route)}
+            onLongPress={() => onLongPress(route, highlighted)}
+            highlighted={highlighted}
+          />
+        );
+      })}
     </View>
   );
 };
@@ -68,68 +89,49 @@ const Tab: React.FC<TabProps> = ({
   onLongPress = () => {},
   highlighted = false,
 }): JSX.Element => {
-  const styles = getStyles(null);
+  const insets = useSafeAreaInsets();
+  const styles = getStyles(insets, highlighted);
   const color = ((!highlighted &&
-    (isFocused ? colors.white : colors.lightGray)) ||
-    colors.lightGreen) as keyof typeof colors;
-
-  const AnimatedTouhable = Animated.createAnimatedComponent(TouchableOpacity);
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-
-  const fadeIn = () => {
-    Animated.timing(fadeAnim, {
-      toValue: 100,
-      duration: 1000,
-      useNativeDriver: false,
-    }).start();
-  };
-
-  // const fadeOut = () => {
-  //   // Will change fadeAnim value to 0 in 3 seconds
-  //   Animated.timing(fadeAnim, {
-  //     toValue: 0,
-  //     duration: 3000,
-  //   }).start();
-  // };
+    (isFocused ? COLORS.white : COLORS.lightGray)) ||
+    COLORS.lightGreen) as keyof typeof COLORS;
 
   return (
-    <AnimatedTouhable
-      onPress={() => {
-        onPress();
-        fadeIn();
-      }}
+    <TouchableOpacity
+      onPress={onPress}
       onLongPress={onLongPress}
-      style={[
-        styles.tab,
-        {
-          // Bind opacity to animated value
-          marginBottom: fadeAnim,
-        },
-      ]}
+      style={[styles.tab]}
     >
       <Icon name={iconName} width={20} height={20} color={color} />
 
-      <Text style={styles.text} size={14} color={color}>
+      <Text color={color} style={[FONTS.h4, styles.text]}>
         {name}
       </Text>
-    </AnimatedTouhable>
+    </TouchableOpacity>
   );
 };
 
-const getStyles = (insets: EdgeInsets | null) =>
+const getStyles = (
+  insets: EdgeInsets | null = null,
+  highlighted: boolean = false,
+) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
-      alignItems: 'center',
       justifyContent: 'space-evenly',
+      alignItems: 'center',
+      backgroundColor: COLORS.primary,
+      height: 100,
       paddingVertical: Number(insets?.bottom) > 0 ? 24 : 12,
-      backgroundColor: colors.primary,
-      borderColor: 'transparent',
     },
     tab: {
-      flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
+      ...(highlighted && {
+        width: 68,
+        height: 68,
+        borderRadius: 34,
+        backgroundColor: COLORS.black,
+      }),
     },
     text: {
       marginTop: 4,

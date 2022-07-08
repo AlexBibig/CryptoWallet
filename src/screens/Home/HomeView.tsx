@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { Text } from '~components';
+import { Button, Text } from '~components';
 
 const HomeView: React.FC = () => {
   return (

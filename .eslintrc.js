@@ -7,6 +7,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 2,
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': ['error'],
+    'func-call-spacing': 'never',
   },
   settings: {
     'import/resolver': {

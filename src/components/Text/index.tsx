@@ -6,14 +6,14 @@ import {
   TextStyle,
 } from 'react-native';
 
-import { colors } from '~theme';
+import { COLORS } from '~theme';
 
 interface TextProps {
   children: ReactNode;
   weight?: TextStyle['fontWeight'];
   size?: TextStyle['fontSize'];
   lineHeight?: TextStyle['lineHeight'];
-  color?: keyof typeof colors;
+  color?: keyof typeof COLORS;
   numberOfLines?: number;
   style?: StyleProp<TextStyle>;
   selectable?: boolean;
@@ -24,7 +24,7 @@ const Text: React.FC<TextProps> = ({
   weight = 'normal',
   size = 16,
   lineHeight = 24,
-  color = colors.black,
+  color = COLORS.black,
   numberOfLines = 1,
   style = {},
   selectable = false,

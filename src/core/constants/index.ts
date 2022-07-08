@@ -17,7 +17,7 @@ export const TAB_CONFIG = {
     name: 'Market',
     icon: 'chart',
   },
-  Profile: {
+  ProfileStack: {
     name: 'Profile',
     icon: 'user',
   },
